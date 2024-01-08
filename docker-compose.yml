@@ -1,8 +1,19 @@
 version: '3'
 
 services:
+  psql_db:
+    container_name: postgresql
+    image: postgres:15-alpine
+    ports:
+      - "5433:5433"
+    volumes:
+      - psql
+
   zipkin:
     container_name: zipkin
     image: openzipkin/zipkin:latest
     ports:
       - "9411:9411"
+
+volumes:
+  psql:
