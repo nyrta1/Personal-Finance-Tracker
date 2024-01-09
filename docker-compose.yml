@@ -1,19 +1,76 @@
 version: '3'
 
 services:
-  psql_db:
+  # Config Server
+  config-server:
+    container_name: config-server
+    build:
+      context: ./config-server
+      dockerfile: Dockerfile
+    ports:
+      - "8088:8088"
+    networks:
+      - spring-cloud-network
+
+  # Service Registry
+  service-registry-eureka:
+    container_name: service-registry-eureka
+    build:
+      context: ./service-registry
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+    networks:
+      - spring-cloud-network
+
+  user-service:
+    container_name: user-service
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    networks:
+      - spring-cloud-network
+
+
+  # PostgreSQL Service
+  psql:
     container_name: postgresql
     image: postgres:15-alpine
     ports:
-      - "5433:5433"
+      - "5433:5432"
     volumes:
-      - psql
+      - psql:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
 
+  # Zipkin Service
   zipkin:
     container_name: zipkin
     image: openzipkin/zipkin:latest
     ports:
       - "9411:9411"
 
+  # Grafana Service
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 0.0.0.0:80:3000
+    volumes:
+      - grafana:/var/lib/grafana
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+
 volumes:
   psql:
+  grafana:
+    driver: local
+
+networks:
+  spring-cloud-network:
+    driver: bridge
