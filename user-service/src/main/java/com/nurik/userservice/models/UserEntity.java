@@ -18,8 +18,4 @@ public class User {
     @Column(unique = true)
     @UsernamePasswordEmailConstraint
     private String password;
-
-    @Column(unique = true)
-    @UsernamePasswordEmailConstraint
-    private String email;
 }
