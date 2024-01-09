@@ -5,6 +5,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,10 @@ import java.util.Date;
 @Component
 @Slf4j
 public class JwtUtils {
+    @Value("${service.app.secret.jwtSecret}")
     private String jwtSecret;
+
+    @Value("${service.app.secret.jwtExpirationMs}")
     private int jwtExpirationMs;
 
     public String generateJwtToken(Authentication authentication) {
