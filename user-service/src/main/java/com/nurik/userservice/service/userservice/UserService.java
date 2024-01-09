@@ -1,8 +1,9 @@
 package com.nurik.userservice.service.userservice;
 
+import com.nurik.userservice.models.AuthRequest;
 import com.nurik.userservice.models.UserEntity;
 
 public interface UserService {
-    void registerTheUser(UserEntity user);
-    UserEntity getUserEntity(UserEntity user);
+    void registerTheUser(AuthRequest user);
+    UserEntity getUserEntity(AuthRequest authUser);
 }
