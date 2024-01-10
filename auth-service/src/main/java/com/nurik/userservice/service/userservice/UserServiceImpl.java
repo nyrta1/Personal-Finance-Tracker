@@ -1,32 +1,31 @@
 package com.nurik.userservice.service.userservice;
 
+import com.nurik.userservice.client.BalanceClient;
 import com.nurik.userservice.models.AuthRequest;
-import com.nurik.userservice.models.Role;
 import com.nurik.userservice.models.UserEntity;
-import com.nurik.userservice.repository.RoleRepository;
 import com.nurik.userservice.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
 @Slf4j
 class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final BalanceClient balanceClient;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, BalanceClient balanceClient) {
         this.userRepository = userRepository;
+        this.balanceClient = balanceClient;
     }
 
     @Override
-    public void registerTheUser(UserEntity userEntity) {
-        userRepository.save(userEntity);
+    public void registerTheUser(UserEntity user) {
+        UserEntity userEntity = userRepository.saveAndFlush(user);
+        balanceClient.createBalance(userEntity.getId());
     }
 
     @Override
