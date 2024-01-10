@@ -6,6 +6,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,9 @@ import java.util.Date;
 @Component
 @Slf4j
 public class JwtUtils {
+    @Value("${service.app.secret.jwtCookieName}")
+    private String jwtCookieName;
+
     @Value("${service.app.secret.jwtSecret}")
     private String jwtSecret;
 
@@ -31,6 +35,24 @@ public class JwtUtils {
                 .setExpiration(new Date(issuedAt.getTime() + jwtExpirationMs))
                 .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    public ResponseCookie generateJwtCookie(Authentication authentication) {
+        String jwtToken = generateJwtToken(authentication);
+
+        return ResponseCookie
+                .from(jwtCookieName, jwtToken)
+                .path("/users")
+                .maxAge(60*60)
+                .httpOnly(true)
+                .build();
+    }
+
+    public ResponseCookie getCleanJwtCookie() {
+        return ResponseCookie
+                .from(jwtCookieName, null)
+                .path("/users").
+                build();
     }
 
     private Key key() {
