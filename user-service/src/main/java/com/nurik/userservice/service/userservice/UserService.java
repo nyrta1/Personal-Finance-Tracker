@@ -4,6 +4,7 @@ import com.nurik.userservice.models.AuthRequest;
 import com.nurik.userservice.models.UserEntity;
 
 public interface UserService {
-    void registerTheUser(AuthRequest user);
+    void registerTheUser(UserEntity user);
     UserEntity getUserEntity(AuthRequest authUser);
+    boolean existsByUsername(String username);
 }
