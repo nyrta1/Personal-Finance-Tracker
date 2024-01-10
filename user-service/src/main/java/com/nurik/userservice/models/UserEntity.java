@@ -18,11 +18,10 @@ public class UserEntity {
     private Long id;
 
     @Column(unique = true)
-    @UsernamePasswordEmailConstraint(minUsernameLength = 8, maxUsernameLength = 30)
+    @UsernamePasswordEmailConstraint
     private String username;
 
-    @Column(unique = true)
-    @UsernamePasswordEmailConstraint(minUsernameLength = 8, maxUsernameLength = 30)
+    @UsernamePasswordEmailConstraint
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL, CascadeType.REMOVE})
