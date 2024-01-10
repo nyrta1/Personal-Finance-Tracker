@@ -3,7 +3,6 @@ package com.nurik.userservice.controllers;
 import com.nurik.userservice.exception.UserNotFoundException;
 import com.nurik.userservice.models.AuthRequest;
 import com.nurik.userservice.models.MessageResponse;
-import com.nurik.userservice.models.UserEntity;
 import com.nurik.userservice.service.authservice.AuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +10,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
