@@ -12,3 +12,14 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+service:
+  app:
+    secret:
+      jwtCookieName: jwtToken
+      jwtSecret: Jy1W8cDu5Yv5WDV1guCoJFgj7eJ7Gt9a1a26sdbjYjk
+      jwtExpirationMs: 600000 # 10 min
+
+logging:
+  level:
+    org.springframework.security.web: DEBUG
