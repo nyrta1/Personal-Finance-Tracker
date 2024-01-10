@@ -11,6 +11,8 @@ services:
       - "8088:8088"
     networks:
       - spring-cloud-network
+    depends_on:
+      - service-registry-eureka
 
   # Service Registry
   service-registry-eureka:
@@ -23,6 +25,7 @@ services:
     networks:
       - spring-cloud-network
 
+  # User MicroService
   user-service:
     container_name: user-service
     build:
@@ -30,13 +33,23 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8081:8081"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://psql:5432/finance
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8088
     networks:
       - spring-cloud-network
+    depends_on:
+      - psql
+      - zipkin
+      - config-server
 
 
   # PostgreSQL Service
   psql:
-    container_name: postgresql
+    container_name: psql
     image: postgres:15-alpine
     ports:
       - "5433:5432"
@@ -45,6 +58,8 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    networks:
+      - spring-cloud-network
 
   # Zipkin Service
   zipkin:
@@ -52,12 +67,14 @@ services:
     image: openzipkin/zipkin:latest
     ports:
       - "9411:9411"
+    networks:
+      - spring-cloud-network
 
   # Grafana Service
   grafana:
-    image: grafana/grafana
+    build: './user-service/config/grafana'
     ports:
-      - 0.0.0.0:80:3000
+      - "3000:3000"
     volumes:
       - grafana:/var/lib/grafana
     deploy:
@@ -65,6 +82,23 @@ services:
       placement:
         constraints:
           - node.role == manager
+    networks:
+      monitoring:
+        aliases:
+          - grafana
+
+  # Prometheus Service
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./user-service/config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus:/prometheus
+    networks:
+      monitoring:
+        aliases:
+          - prometheus
 
 volumes:
   psql:
@@ -74,3 +108,4 @@ volumes:
 networks:
   spring-cloud-network:
     driver: bridge
+  monitoring:
