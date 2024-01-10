@@ -6,4 +6,12 @@ public class HttpRequestWhiteList {
             "/users/auth/register",
             "/users/auth/hello"
     };
+
+    public final static String[] ACTUATOR_INFO = {
+            "/actuator",
+            "/actuator/health/{*path}",
+            "/actuator/health",
+            "/actuator/info",
+            "/actuator/prometheus"
+    };
 }

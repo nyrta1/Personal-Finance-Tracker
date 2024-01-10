@@ -51,6 +51,7 @@ public class SpringSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(httpRequest -> httpRequest
                         .requestMatchers(HttpRequestWhiteList.AUTH_REQUEST).permitAll()
+                        .requestMatchers(HttpRequestWhiteList.ACTUATOR_INFO).permitAll()
                         .anyRequest().authenticated());
 
         http.authenticationProvider(authenticationProvider());
