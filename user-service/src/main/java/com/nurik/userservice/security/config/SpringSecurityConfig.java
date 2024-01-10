@@ -43,8 +43,8 @@ public class SpringSecurityConfig {
         http
                 .cors(cors -> cors
                         .configurationSource(corsConfigurationSource()))
-                .csrf(csrf -> csrf
-                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+                .csrf(csrf -> csrf.disable())
+//                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(sessionManager -> sessionManager
@@ -86,19 +86,6 @@ public class SpringSecurityConfig {
         return new AuthTokenFilter();
     }
 
-    // TODO: configure the cors
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.addAllowedOrigin("http://localhost:8080");
-//        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-//        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Cookie", "Set-Cookie", "X-XSRF-TOKEN"));
-//        configuration.setMaxAge(3600L);
-//        configuration.setAllowCredentials(true);
-//
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("*");
