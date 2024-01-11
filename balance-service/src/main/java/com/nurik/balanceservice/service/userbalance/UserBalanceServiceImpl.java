@@ -23,4 +23,9 @@ class UserBalanceServiceImpl implements UserBalanceService {
 
         userBalanceRepository.save(userBalance);
     }
+
+    @Override
+    public UserBalance findByUserId(Long userId) {
+        return userBalanceRepository.findByUserId(userId).orElse(null);
+    }
 }
