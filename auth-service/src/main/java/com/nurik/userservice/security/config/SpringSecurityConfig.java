@@ -1,5 +1,6 @@
 package com.nurik.userservice.security.config;
 
+import com.nurik.userservice.models.Role;
 import com.nurik.userservice.security.jwt.AuthEntryPointJwt;
 import com.nurik.userservice.security.jwt.AuthTokenFilter;
 import com.nurik.userservice.security.service.userdetails.CustomUserDetailsService;
@@ -18,6 +19,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
@@ -50,8 +52,10 @@ public class SpringSecurityConfig {
                 .sessionManagement(sessionManager -> sessionManager
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(httpRequest -> httpRequest
-                        .requestMatchers(HttpRequestWhiteList.AUTH_REQUEST).permitAll()
-                        .requestMatchers(HttpRequestWhiteList.ACTUATOR_INFO).permitAll()
+                        .requestMatchers(HttpRequestWhiteList.POST_AUTH_REQUEST).permitAll()
+                        .requestMatchers(HttpRequestWhiteList.POST_BALANCE_MICROSERVICE).permitAll()
+//                            .access(new WebExpressionAuthorizationManager("hasIpAddress('http://balance-service')"))
+                        .requestMatchers(HttpRequestWhiteList.GET_ACTUATOR_INFO).permitAll()
                         .anyRequest().authenticated());
 
         http.authenticationProvider(authenticationProvider());
