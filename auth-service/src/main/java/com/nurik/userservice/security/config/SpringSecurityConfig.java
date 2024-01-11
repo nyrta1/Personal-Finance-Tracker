@@ -46,16 +46,15 @@ public class SpringSecurityConfig {
                 .cors(cors -> cors
                         .configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
-//                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(sessionManager -> sessionManager
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(httpRequest -> httpRequest
-                        .requestMatchers(HttpRequestWhiteList.POST_AUTH_REQUEST).permitAll()
-                        .requestMatchers(HttpRequestWhiteList.POST_BALANCE_MICROSERVICE).permitAll()
-//                            .access(new WebExpressionAuthorizationManager("hasIpAddress('http://balance-service')"))
-                        .requestMatchers(HttpRequestWhiteList.GET_ACTUATOR_INFO).permitAll()
+                        .requestMatchers(HttpRequestWhiteList.AUTH_REQUEST.POST).permitAll()
+                        .requestMatchers(HttpMethod.POST, HttpRequestWhiteList.BALANCE_MICROSERVICE.POST).permitAll()
+//                        .access(new WebExpressionAuthorizationManager("hasIpAddress('host.docker.internal')"))
+                        .requestMatchers(HttpRequestWhiteList.ACTUATOR_INFO.GET).permitAll()
                         .anyRequest().authenticated());
 
         http.authenticationProvider(authenticationProvider());
