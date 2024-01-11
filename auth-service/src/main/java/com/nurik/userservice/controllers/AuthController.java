@@ -3,6 +3,8 @@ package com.nurik.userservice.controllers;
 import com.nurik.userservice.exception.UserNotFoundException;
 import com.nurik.userservice.models.AuthRequest;
 import com.nurik.userservice.models.MessageResponse;
+import com.nurik.userservice.security.jwt.JwtUtils;
+import com.nurik.userservice.security.util.SecurityUtil;
 import com.nurik.userservice.service.authservice.AuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +31,10 @@ public class AuthController {
             if (authUser.getUsername() == null || authUser.getPassword() == null) {
                 throw new UserNotFoundException("UserName or Password is Empty");
             }
-            ResponseCookie jwtCookie = authService.authenticateUser(authUser);
+            String jwtTokenString = authService.jwtToken(authUser);
             return ResponseEntity.ok()
-                    .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                    .body("Successfully!");
+                    .header(HttpHeaders.AUTHORIZATION, jwtTokenString)
+                    .body("Successfully! " + SecurityUtil.getSessionUser() + " " + jwtTokenString);
         } catch (UserNotFoundException e) {
             return ResponseEntity
                     .status(HttpStatus.CONFLICT)
@@ -55,5 +57,13 @@ public class AuthController {
                     .status(HttpStatus.CONFLICT)
                     .body("Username or password is invalid!");
         }
+    }
+
+    @PostMapping("/jwt/extract-userid")
+    public ResponseEntity<?> jwtIsValid(@RequestParam("jwtToken") String jwtToken) {
+        Long userId = authService.getUserIdFromJwt(jwtToken);
+        return ResponseEntity
+                .status(userId == null ? HttpStatus.UNAUTHORIZED : HttpStatus.OK)
+                .body(userId);
     }
 }
