@@ -10,6 +10,7 @@ import com.nurik.userservice.security.jwt.JwtUtils;
 import com.nurik.userservice.service.userservice.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -63,5 +64,29 @@ class AuthServiceImpl implements AuthService {
         userService.registerTheUser(user);
 
         return new MessageResponse("User registered successfully!");
+    }
+
+    @Override
+    public Long getUserIdFromJwt(String jwtToken) {
+        if (jwtUtils.validateJwtToken(jwtToken)){
+            String removedBearerPrefixJwt = jwtUtils.removeBearerPrefix(jwtToken);
+            String username = jwtUtils.getUserNameFromJwtToken(removedBearerPrefixJwt);
+            UserEntity userFromDb = userService.findUserByUsername(username);
+            if (userFromDb == null) {
+                return null;
+            }
+            return userFromDb.getId();
+        }
+        return null;
+    }
+
+    @Override
+    public String jwtToken(AuthRequest authUser) {
+        Authentication authentication = authenticationManager
+                .authenticate(
+                        new UsernamePasswordAuthenticationToken(authUser.getUsername(), authUser.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return jwtUtils.generateJwtToken(authentication);
     }
 }
