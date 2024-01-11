@@ -1,6 +1,5 @@
 package com.nurik.userservice.security.jwt;
 
-import com.nurik.userservice.security.service.userdetails.CustomUserDetailsImpl;
 import com.nurik.userservice.security.service.userdetails.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

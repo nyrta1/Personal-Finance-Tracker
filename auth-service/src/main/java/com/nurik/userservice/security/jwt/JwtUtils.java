@@ -6,9 +6,11 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.security.Key;
 import java.util.Date;
@@ -63,17 +65,18 @@ public class JwtUtils {
         return Jwts.parserBuilder()
                 .setSigningKey(key())
                     .build()
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                     .getBody()
-                .getSubject();
+                    .getSubject();
     }
 
     public boolean validateJwtToken(String authToken) {
         try {
+            String removeBearerPrefixToken = removeBearerPrefix(authToken);
             Jwts.parserBuilder()
                     .setSigningKey(key())
                         .build()
-                    .parse(authToken);
+                    .parse(removeBearerPrefixToken);
             return true;
         } catch (MalformedJwtException e) {
             log.error("Invalid JWT token: {}", e.getMessage());
@@ -87,4 +90,12 @@ public class JwtUtils {
 
         return false;
     }
+
+    public String removeBearerPrefix(String authToken) {
+        if (StringUtils.hasText(authToken) && authToken.startsWith("Bearer ")) {
+            return authToken.substring(7);
+        }
+        return null;
+    }
+
 }
