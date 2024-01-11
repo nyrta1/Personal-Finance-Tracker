@@ -1,0 +1,6 @@
+{
+  "timestamp": "2024-01-10T20:23:14.484+00:00",
+  "status": 400,
+  "error": "Bad Request",
+  "path": "/balance/auth"
+}

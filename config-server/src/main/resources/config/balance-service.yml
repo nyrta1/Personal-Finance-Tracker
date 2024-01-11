@@ -1,6 +1,5 @@
 server:
-  port: 8081
-  use-forward-headers: true
+  port: 8082
 
 eureka:
   client:

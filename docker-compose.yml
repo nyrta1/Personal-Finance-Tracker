@@ -26,10 +26,10 @@ services:
       - spring-cloud-network
 
   # User MicroService
-  user-service:
-    container_name: user-service
+  auth-service:
+    container_name: auth-service
     build:
-      context: ./user-service
+      context: ./auth-service
       dockerfile: Dockerfile
     ports:
       - "8081:8081"
@@ -72,7 +72,7 @@ services:
 
   # Grafana Service
   grafana:
-    build: './user-service/config/grafana'
+    build: './auth-service/config/grafana'
     ports:
       - "3000:3000"
     volumes:
@@ -93,7 +93,7 @@ services:
     ports:
       - 9090:9090
     volumes:
-      - ./user-service/config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./auth-service/config/prometheus.yml:/etc/prometheus/prometheus.yml
       - ./prometheus:/prometheus
     networks:
       monitoring:
