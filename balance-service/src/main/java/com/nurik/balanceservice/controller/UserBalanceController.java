@@ -1,6 +1,7 @@
 package com.nurik.balanceservice.controller;
 
 import com.nurik.balanceservice.client.AuthClient;
+import com.nurik.balanceservice.model.UserBalance;
 import com.nurik.balanceservice.service.userbalance.UserBalanceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,22 @@ public class UserBalanceController {
     public ResponseEntity<?> validate(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
         Long userId = authClient.getUserIdFromJwt(authorizationHeader);
         return ResponseEntity
-                .status(userId == null ? HttpStatus.OK : HttpStatus.UNAUTHORIZED)
+                .status(userId == null ? HttpStatus.UNAUTHORIZED : HttpStatus.OK)
                 .body(userId);
+    }
+
+    @GetMapping
+    public ResponseEntity<UserBalance> getUserBalance(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+        Long userId = authClient.getUserIdFromJwt(authorizationHeader);
+        if (userId == null) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(null);
+        }
+        UserBalance userBalance = userBalanceService.findByUserId(userId);
+        log.info("userBalance: " + userBalance.toString());
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(userBalance);
     }
 }
