@@ -30,6 +30,22 @@ public class UserBalanceController {
         return ResponseEntity.status(HttpStatus.OK).body("The registered userId is: " + userId);
     }
 
+    @PostMapping("/spend")
+    public ResponseEntity<Boolean> spentMoneyFromBalance(@RequestParam("userId") Long userId, @RequestParam("amount") Integer amount) {
+        Boolean status = userBalanceService.spent(userId, amount);
+        return ResponseEntity
+                .status(status ? HttpStatus.OK : HttpStatus.BAD_REQUEST)
+                .body(status);
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<Boolean> addMoneyToBalance(@RequestParam("userId") Long userId, @RequestParam("amount") Integer amount) {
+        Boolean status = userBalanceService.add(userId, amount);
+        return ResponseEntity
+                .status(status ? HttpStatus.OK : HttpStatus.BAD_REQUEST)
+                .body(status);
+    }
+
     @PostMapping("/jwt/validate")
     public ResponseEntity<?> validate(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
         Long userId = authClient.getUserIdFromJwt(authorizationHeader);
@@ -39,15 +55,8 @@ public class UserBalanceController {
     }
 
     @GetMapping
-    public ResponseEntity<UserBalance> getUserBalance(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
-        Long userId = authClient.getUserIdFromJwt(authorizationHeader);
-        if (userId == null) {
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .body(null);
-        }
+    public ResponseEntity<UserBalance> getUserBalance(@RequestParam("userId") Long userId) {
         UserBalance userBalance = userBalanceService.findByUserId(userId);
-        log.info("userBalance: " + userBalance.toString());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userBalance);
