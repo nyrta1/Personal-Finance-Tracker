@@ -19,3 +19,7 @@ The "Personal Finance Tracker" project is a robust, full-stack application desig
 - Zipkin
 - Grafana
 - Prometheus
+
+## Personal Finance Tracker microservices scheme logic
+
+<img src="microservices-scheme-logic.png" alt="Personal Finance Tracker microservices scheme logic" style="width: 100%; height: 100%;">
