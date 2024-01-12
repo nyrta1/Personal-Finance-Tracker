@@ -19,10 +19,10 @@ import java.time.LocalDateTime;
 public class Transactions {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "transactions_id")
     private Long transactionsId;
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     private Long userId;
 
     @ManyToOne
@@ -30,7 +30,7 @@ public class Transactions {
     private Category category;
 
     @Column(name = "amount", nullable = false)
-    private BigInteger amount;
+    private Integer amount;
 
     @Column(name = "transaction_date", nullable = false)
     @CreationTimestamp
@@ -38,4 +38,8 @@ public class Transactions {
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private TransactionStatus status;
 }
