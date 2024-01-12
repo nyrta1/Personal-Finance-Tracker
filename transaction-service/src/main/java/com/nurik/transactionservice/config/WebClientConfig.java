@@ -1,5 +1,6 @@
 package com.nurik.transactionservice.config;
 
+import com.nurik.transactionservice.client.AuthClient;
 import com.nurik.transactionservice.client.BalanceClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.reactive.LoadBalancedExchangeFilterFunction;
@@ -24,6 +25,14 @@ public class WebClientConfig {
     }
 
     @Bean
+    public WebClient AuthWebClient() {
+        return WebClient.builder()
+                .baseUrl("http://auth-service")
+                .filter(filterFunction)
+                .build();
+    }
+
+    @Bean
     public BalanceClient balanceClient() {
         HttpServiceProxyFactory httpServiceProxyFactory
                 = HttpServiceProxyFactory
@@ -31,5 +40,15 @@ public class WebClientConfig {
                 .build();
 
         return httpServiceProxyFactory.createClient(BalanceClient.class);
+    }
+
+    @Bean
+    public AuthClient authClient() {
+        HttpServiceProxyFactory httpServiceProxyFactory
+                = HttpServiceProxyFactory
+                .builder(WebClientAdapter.forClient(AuthWebClient()))
+                .build();
+
+        return httpServiceProxyFactory.createClient(AuthClient.class);
     }
 }
