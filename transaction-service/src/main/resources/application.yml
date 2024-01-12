@@ -2,16 +2,16 @@ spring:
   application:
     name: transaction-service
   config:
-    import: optional:configserver:http://localhost:8088
+    import: "optional:configserver:http://localhost:8088"
   datasource:
     url: jdbc:postgresql://localhost:5433/finance
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
-    jpa:
-      hibernate:
-        ddl-auto: update
-      show-sql: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 
 logging:
   level:
