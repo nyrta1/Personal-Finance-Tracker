@@ -1,4 +1,4 @@
-package com.nurik.userservice.models;
+package com.nurik.userservice.payload.response;
 
 public class MessageResponse {
     private String message;

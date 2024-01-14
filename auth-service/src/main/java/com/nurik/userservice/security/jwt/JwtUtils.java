@@ -31,7 +31,7 @@ public class JwtUtils {
         CustomUserDetailsImpl userPrincipal = (CustomUserDetailsImpl) authentication.getPrincipal();
         Date issuedAt = new Date();
 
-        return Jwts.builder()
+        return "Bearer " + Jwts.builder()
                 .setSubject(userPrincipal.getUsername())
                 .setIssuedAt(issuedAt)
                 .setExpiration(new Date(issuedAt.getTime() + jwtExpirationMs))

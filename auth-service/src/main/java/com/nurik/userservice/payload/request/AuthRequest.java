@@ -1,4 +1,4 @@
-package com.nurik.userservice.models;
+package com.nurik.userservice.payload.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

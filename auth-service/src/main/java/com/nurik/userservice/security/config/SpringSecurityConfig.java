@@ -52,9 +52,10 @@ public class SpringSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(httpRequest -> httpRequest
                         .requestMatchers(HttpRequestWhiteList.AUTH_REQUEST.POST).permitAll()
-                        .requestMatchers(HttpMethod.POST, HttpRequestWhiteList.BALANCE_MICROSERVICE.POST).permitAll()
-//                        .access(new WebExpressionAuthorizationManager("hasIpAddress('host.docker.internal')"))
-                        .requestMatchers(HttpRequestWhiteList.ACTUATOR_INFO.GET).permitAll()
+                        .requestMatchers(HttpMethod.POST, HttpRequestWhiteList.BALANCE_MICROSERVICE.POST).access(
+                                new WebExpressionAuthorizationManager("hasIpAddress('host.docker.internal')"))
+                        .requestMatchers(HttpRequestWhiteList.ACTUATOR_INFO.GET).access(
+                                new WebExpressionAuthorizationManager("hasIpAddress('host.docker.internal')"))
                         .anyRequest().authenticated());
 
         http.authenticationProvider(authenticationProvider());

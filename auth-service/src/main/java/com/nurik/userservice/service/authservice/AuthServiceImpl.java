@@ -1,8 +1,7 @@
 package com.nurik.userservice.service.authservice;
 
-import com.nurik.userservice.client.BalanceClient;
-import com.nurik.userservice.models.AuthRequest;
-import com.nurik.userservice.models.MessageResponse;
+import com.nurik.userservice.payload.request.AuthRequest;
+import com.nurik.userservice.payload.response.MessageResponse;
 import com.nurik.userservice.models.Role;
 import com.nurik.userservice.models.UserEntity;
 import com.nurik.userservice.repository.RoleRepository;
@@ -10,9 +9,7 @@ import com.nurik.userservice.security.jwt.JwtUtils;
 import com.nurik.userservice.service.userservice.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

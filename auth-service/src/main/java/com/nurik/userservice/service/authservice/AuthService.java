@@ -1,8 +1,7 @@
 package com.nurik.userservice.service.authservice;
 
-import com.nurik.userservice.models.AuthRequest;
-import com.nurik.userservice.models.MessageResponse;
-import org.springframework.http.HttpStatus;
+import com.nurik.userservice.payload.request.AuthRequest;
+import com.nurik.userservice.payload.response.MessageResponse;
 import org.springframework.http.ResponseCookie;
 
 public interface AuthService {

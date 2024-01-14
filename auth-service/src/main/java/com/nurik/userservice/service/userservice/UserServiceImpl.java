@@ -1,7 +1,7 @@
 package com.nurik.userservice.service.userservice;
 
 import com.nurik.userservice.client.BalanceClient;
-import com.nurik.userservice.models.AuthRequest;
+import com.nurik.userservice.payload.request.AuthRequest;
 import com.nurik.userservice.models.UserEntity;
 import com.nurik.userservice.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
