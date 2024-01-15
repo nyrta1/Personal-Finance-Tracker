@@ -1,5 +1,6 @@
 package com.nurik.balanceservice.security.config;
 
+import com.nurik.balanceservice.security.whitelist.SecurityWhiteList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,9 +27,9 @@ public class BalanceSecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(httpRequest -> httpRequest
-                        .requestMatchers("/**").permitAll()
-//                        .requestMatchers("/balance/auth").permitAll()
-//                            .access(new WebExpressionAuthorizationManager("hasIpAddress('http://auth-service')"))
+                        .requestMatchers(SecurityWhiteList.PUBLIC_NETWORK.BALANCE_INFO).permitAll()
+                        .requestMatchers(SecurityWhiteList.PRIVATE_NETWORK.BALANCE_SYSTEM_LOGIC).access(
+                                new WebExpressionAuthorizationManager("hasIpAddress('localhost')"))
                         .anyRequest().authenticated());
 
         return http.build();

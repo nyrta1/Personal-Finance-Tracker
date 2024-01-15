@@ -1,5 +1,6 @@
 package com.nurik.transactionservice.security.config;
 
+import com.nurik.transactionservice.security.whitelist.SecurityWhiteList;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,7 +22,8 @@ public class TransactionServiceSecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(httpRequest -> httpRequest
-                        .requestMatchers("/**").permitAll()
+                        .requestMatchers(SecurityWhiteList.PUBLIC_NETWORK.TRANSACTION_API.POST).permitAll()
+                        .requestMatchers(SecurityWhiteList.PUBLIC_NETWORK.CATEGORY_API.POST).permitAll()
                         .anyRequest().authenticated());
 
         return http.build();

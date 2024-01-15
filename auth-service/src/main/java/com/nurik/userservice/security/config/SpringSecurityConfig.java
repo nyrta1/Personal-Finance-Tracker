@@ -1,10 +1,9 @@
 package com.nurik.userservice.security.config;
 
-import com.nurik.userservice.models.Role;
 import com.nurik.userservice.security.jwt.AuthEntryPointJwt;
 import com.nurik.userservice.security.jwt.AuthTokenFilter;
 import com.nurik.userservice.security.service.userdetails.CustomUserDetailsService;
-import com.nurik.userservice.security.whitelist.HttpRequestWhiteList;
+import com.nurik.userservice.security.whitelist.SecurityWhiteList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +13,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -51,11 +49,12 @@ public class SpringSecurityConfig {
                 .sessionManagement(sessionManager -> sessionManager
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(httpRequest -> httpRequest
-                        .requestMatchers(HttpRequestWhiteList.AUTH_REQUEST.POST).permitAll()
-                        .requestMatchers(HttpMethod.POST, HttpRequestWhiteList.BALANCE_MICROSERVICE.POST).access(
-                                new WebExpressionAuthorizationManager("hasIpAddress('host.docker.internal')"))
-                        .requestMatchers(HttpRequestWhiteList.ACTUATOR_INFO.GET).access(
-                                new WebExpressionAuthorizationManager("hasIpAddress('host.docker.internal')"))
+                        .requestMatchers(SecurityWhiteList.PUBLIC_NETWORK.AUTH_REQUEST.POST).permitAll()
+                        .requestMatchers(HttpMethod.POST, SecurityWhiteList.PRIVATE_NETWORK.BALANCE_MICROSERVICE.POST).access(
+                                new WebExpressionAuthorizationManager("hasIpAddress('localhost')"))
+                        .requestMatchers(SecurityWhiteList.PRIVATE_NETWORK.ACTUATOR_INFO.GET).permitAll()
+//                        .access(
+//                                new WebExpressionAuthorizationManager("hasIpAddress('host.docker.internal')"))
                         .anyRequest().authenticated());
 
         http.authenticationProvider(authenticationProvider());
