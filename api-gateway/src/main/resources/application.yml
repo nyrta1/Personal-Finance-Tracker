@@ -1,1 +1,33 @@
+server:
+  port: 8060
 
+spring:
+  config:
+    import: "optional:configserver:localhost:8088"
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      mvc:
+        routes:
+          - id: auth-service
+            uri: lb://auth-service
+            predicates:
+              - Path:/auth-service/users/auth/**
+          - id: balance-service
+            uri: lb://balance-service
+            predicates:
+              - Path:/balance-service/balance/user/**
+          - id: transaction-service
+            uri: lb://transaction-service
+            predicates:
+              - Path:/transaction-service/category/create,/transaction-service/transaction/**
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
