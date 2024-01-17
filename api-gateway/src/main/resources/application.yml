@@ -3,7 +3,7 @@ server:
 
 spring:
   config:
-    import: "optional:configserver:localhost:8088"
+    import: "optional:configserver:http://localhost:8088"
   application:
     name: api-gateway
   cloud:
@@ -13,15 +13,15 @@ spring:
           - id: auth-service
             uri: lb://auth-service
             predicates:
-              - Path:/auth-service/users/auth/**
+              - Path=/users/auth/**
           - id: balance-service
             uri: lb://balance-service
             predicates:
-              - Path:/balance-service/balance/user/**
+              - Path=/balance/user/**
           - id: transaction-service
             uri: lb://transaction-service
             predicates:
-              - Path:/transaction-service/category/create,/transaction-service/transaction/**
+              - Path=/transaction/**
 eureka:
   client:
     service-url:
