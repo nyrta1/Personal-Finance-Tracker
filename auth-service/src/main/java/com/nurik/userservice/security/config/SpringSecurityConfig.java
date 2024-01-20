@@ -41,20 +41,24 @@ public class SpringSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors
-                        .configurationSource(corsConfigurationSource()))
+                .cors(cors -> cors.
+                        configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(sessionManager -> sessionManager
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(httpRequest -> httpRequest
-                        .requestMatchers(SecurityWhiteList.PUBLIC_NETWORK.AUTH_REQUEST.POST).permitAll()
-                        .requestMatchers(HttpMethod.POST, SecurityWhiteList.PRIVATE_NETWORK.BALANCE_MICROSERVICE.POST).access(
-                                new WebExpressionAuthorizationManager("hasIpAddress('localhost')"))
-                        .requestMatchers(SecurityWhiteList.PRIVATE_NETWORK.ACTUATOR_INFO.GET).permitAll()
-//                        .access(
-//                                new WebExpressionAuthorizationManager("hasIpAddress('host.docker.internal')"))
+                        .requestMatchers(SecurityWhiteList.
+                                PUBLIC_NETWORK.AUTH_REQUEST.POST).permitAll()
+
+                        .requestMatchers(HttpMethod.POST, SecurityWhiteList.
+                                PRIVATE_NETWORK.BALANCE_MICROSERVICE.POST).access(
+                                    new WebExpressionAuthorizationManager("hasIpAddress('localhost')"))
+
+                        .requestMatchers(SecurityWhiteList.
+                                PRIVATE_NETWORK.ACTUATOR_INFO.GET).permitAll()
+
                         .anyRequest().authenticated());
 
         http.authenticationProvider(authenticationProvider());
