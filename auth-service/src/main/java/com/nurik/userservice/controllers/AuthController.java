@@ -32,7 +32,7 @@ public class AuthController {
             String jwtTokenString = authService.jwtToken(authUser);
             return ResponseEntity.ok()
                     .header(HttpHeaders.AUTHORIZATION, jwtTokenString)
-                    .body("Successfully! " + SecurityUtil.getSessionUser() + " " + jwtTokenString);
+                    .body("Successfully! ");
         } catch (UserNotFoundException e) {
             return ResponseEntity
                     .status(HttpStatus.CONFLICT)
