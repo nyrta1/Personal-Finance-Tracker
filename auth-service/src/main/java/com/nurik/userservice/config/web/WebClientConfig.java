@@ -1,4 +1,4 @@
-package com.nurik.userservice.config;
+package com.nurik.userservice.config.web;
 
 import com.nurik.userservice.client.BalanceClient;
 import org.springframework.beans.factory.annotation.Autowired;
